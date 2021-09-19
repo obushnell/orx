@@ -545,7 +545,7 @@ static void orxFASTCALL orxText_UpdateSize(orxTEXT *_pstText)
             *pc = orxCHAR_NULL;
             for(pcDebug = pc - 1; (pcDebug >= _pstText->zString) && (*pcDebug != ' ') && (*pcDebug != '\t') && (*pcDebug != orxCHAR_LF) && (*pcDebug != orxCHAR_CR); pcDebug--)
               ;
-            orxDEBUG_PRINT(orxDEBUG_LEVEL_DISPLAY, "[%s] Word <%s> is too long to fit inside the requested <%g> pixels!", (_pstText->zReference != orxNULL) ? _pstText->zReference : orxSTRING_EMPTY, pcDebug + 1, _pstText->fWidth);
+            orxDEBUG_PRINT(orxDEBUG_LEVEL_DISPLAY, "[%s] Word <%s>'s <%g> pixels is too long to fit inside the requested <%g> pixels!", (_pstText->zReference != orxNULL) ? _pstText->zReference : orxSTRING_EMPTY, pcDebug + 1, fWidth, _pstText->fWidth);
             *pc = cBackup;
           }
         }
