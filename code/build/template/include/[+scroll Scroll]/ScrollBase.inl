@@ -1,6 +1,6 @@
 /* Scroll
  *
- * Copyright (c) 2008-2021 Orx-Project
+ * Copyright (c) 2008-2022 Orx-Project
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -1595,9 +1595,6 @@ orxSTATUS orxFASTCALL ScrollBase::StaticEventHandler(const orxEVENT *_pstEvent)
           {
             ScrollObjectBinderBase *poBinder;
 
-            // Clears internal reference
-            poObject->SetOrxObject(orxNULL);
-
             // Gets binder
             poBinder = ScrollObjectBinderBase::GetBinder(orxObject_GetName(pstObject));
 
@@ -1607,6 +1604,9 @@ orxSTATUS orxFASTCALL ScrollBase::StaticEventHandler(const orxEVENT *_pstEvent)
               // Uses it to delete object
               poBinder->DeleteObject(poObject, orxObject_GetName(pstObject));
             }
+
+            // Clears internal reference
+            poObject->SetOrxObject(orxNULL);
           }
         }
         else

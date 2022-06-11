@@ -1,6 +1,6 @@
 /* Orx - Portable Game Engine
  *
- * Copyright (c) 2008-2021 Orx-Project
+ * Copyright (c) 2008-2022 Orx-Project
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -811,7 +811,7 @@ static orxSTATUS orxFASTCALL orxSpawner_EventHandler(const orxEVENT *_pstEvent)
                 case orxSPAWNER_KU32_FLAG_USE_RELATIVE_SPEED_OBJECT:
                 {
                   /* Applies relative speed (object) */
-                  orxVector_Mul(&vSpeed, orxVector_2DRotate(&vSpeed, &(pstSpawner->vSpeed), fRotation), &vScale);
+                  orxVector_2DRotate(&vSpeed, orxVector_Mul(&vSpeed, &(pstSpawner->vSpeed), &vScale), fRotation);
                   orxObject_SetSpeed(pstObject, &vSpeed);
                   break;
                 }
@@ -819,7 +819,7 @@ static orxSTATUS orxFASTCALL orxSpawner_EventHandler(const orxEVENT *_pstEvent)
                 case orxSPAWNER_KU32_FLAG_USE_RELATIVE_SPEED_SPAWNER:
                 {
                   /* Applies relative speed (spawner) */
-                  orxVector_Mul(&vSpeed, orxVector_2DRotate(&vSpeed, &(pstSpawner->vSpeed), pstSpawner->fPendingRotation), pstSpawner->pvPendingScale);
+                  orxVector_2DRotate(&vSpeed, orxVector_Mul(&vSpeed, &(pstSpawner->vSpeed), pstSpawner->pvPendingScale), pstSpawner->fPendingRotation);
                   orxObject_SetSpeed(pstObject, &vSpeed);
                   break;
                 }
@@ -827,7 +827,7 @@ static orxSTATUS orxFASTCALL orxSpawner_EventHandler(const orxEVENT *_pstEvent)
                 case orxSPAWNER_KU32_MASK_USE_RELATIVE_SPEED:
                 {
                   /* Applies relative speed (both) */
-                  orxVector_Mul(&vSpeed, orxVector_2DRotate(&vSpeed, &(pstSpawner->vSpeed), fCombinedRotation), &vCombinedScale);
+                  orxVector_2DRotate(&vSpeed, orxVector_Mul(&vSpeed, &(pstSpawner->vSpeed), &vCombinedScale), fCombinedRotation);
                   orxObject_SetSpeed(pstObject, &vSpeed);
                   break;
                 }
@@ -1825,7 +1825,7 @@ orxSTATUS orxFASTCALL orxSpawner_SetNextWaveDelay(orxSPAWNER *_pstSpawner, orxFL
 
 /** Gets spawner wave size
  * @param[in]   _pstSpawner     Concerned spawner
- * @return      Number of objects spawned in a wave / 0 if not in wave mode
+ * @return      Number of objects spawned in a wave
  */
 orxU32 orxFASTCALL orxSpawner_GetWaveSize(const orxSPAWNER *_pstSpawner)
 {
@@ -1836,7 +1836,7 @@ orxU32 orxFASTCALL orxSpawner_GetWaveSize(const orxSPAWNER *_pstSpawner)
   orxSTRUCTURE_ASSERT(_pstSpawner);
 
   /* Updates result */
-  u32Result = orxStructure_TestFlags(_pstSpawner, orxSPAWNER_KU32_FLAG_WAVE_MODE) ? _pstSpawner->u32WaveSize : 0;
+  u32Result = _pstSpawner->u32WaveSize;
 
   /* Done! */
   return u32Result;
@@ -1947,10 +1947,10 @@ orxVECTOR *orxFASTCALL orxSpawner_GetObjectSpeed(const orxSPAWNER *_pstSpawner, 
   return pvResult;
 }
 
-/** Spawns objects
+/** Spawns items
  * @param[in]   _pstSpawner     Concerned spawner
- * @param[in]   _u32Number      Number of objects to spawn
- * @return      Number of spawned objects
+ * @param[in]   _u32Number      Number of items to spawn, if orxU32_UNDEFINED, the spawner's wave size will be used instead
+ * @return      Number of spawned items
  */
 orxU32 orxFASTCALL orxSpawner_Spawn(orxSPAWNER *_pstSpawner, orxU32 _u32Number)
 {
@@ -1961,7 +1961,6 @@ orxU32 orxFASTCALL orxSpawner_Spawn(orxSPAWNER *_pstSpawner, orxU32 _u32Number)
   /* Checks */
   orxASSERT(sstSpawner.u32Flags & orxSPAWNER_KU32_STATIC_FLAG_READY);
   orxSTRUCTURE_ASSERT(_pstSpawner);
-  orxASSERT(_u32Number > 0);
 
   /* Gets spawner's frame values */
   orxSpawner_GetWorldPosition(_pstSpawner, &vPosition);
@@ -1969,7 +1968,7 @@ orxU32 orxFASTCALL orxSpawner_Spawn(orxSPAWNER *_pstSpawner, orxU32 _u32Number)
   fRotation = orxSpawner_GetWorldRotation(_pstSpawner);
 
   /* Spawns objects */
-  u32Result = orxSpawner_SpawnInternal(_pstSpawner, _u32Number, &vPosition, &vScale, fRotation, orxFLOAT_0);
+  u32Result = orxSpawner_SpawnInternal(_pstSpawner, (_u32Number != orxU32_UNDEFINED) ? _u32Number : _pstSpawner->u32WaveSize, &vPosition, &vScale, fRotation, orxFLOAT_0);
 
   /* Done! */
   return u32Result;

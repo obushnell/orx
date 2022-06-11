@@ -1,6 +1,6 @@
 /* Orx - Portable Game Engine
  *
- * Copyright (c) 2008-2021 Orx-Project
+ * Copyright (c) 2008-2022 Orx-Project
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -1280,8 +1280,8 @@ orxVIEWPORT *orxFASTCALL orxViewport_CreateFromConfig(const orxSTRING _zConfigID
             /* Deactivates display debug level */
             orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_DISPLAY, orxFALSE);
 
-            /* Creates texture from file */
-            pstTexture = orxTexture_CreateFromFile(zTextureName, orxConfig_GetBool(orxVIEWPORT_KZ_CONFIG_KEEP_IN_CACHE));
+            /* Loads texture */
+            pstTexture = orxTexture_Load(zTextureName, orxConfig_GetBool(orxVIEWPORT_KZ_CONFIG_KEEP_IN_CACHE));
 
             /* Restores display debug level state */
             orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_DISPLAY, bDisplayLevelEnabled);
@@ -1408,8 +1408,8 @@ orxVIEWPORT *orxFASTCALL orxViewport_CreateFromConfig(const orxSTRING _zConfigID
           /* Deactivates display debug level */
           orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_DISPLAY, orxFALSE);
 
-          /* Creates texture from file */
-          pstTexture = orxTexture_CreateFromFile(zTextureName, orxConfig_GetBool(orxVIEWPORT_KZ_CONFIG_KEEP_IN_CACHE));
+          /* Loads texture */
+          pstTexture = orxTexture_Load(zTextureName, orxConfig_GetBool(orxVIEWPORT_KZ_CONFIG_KEEP_IN_CACHE));
 
           /* Restores display debug level state */
           orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_DISPLAY, bDisplayLevelEnabled);
